@@ -22,7 +22,12 @@ const myForm = document.querySelector('#my-form');
             //const li = document.createElement('li');
             //li.appendChild(document.createTextNode(`${nameInput.value}`));
             //userList.appendChild(li);
-            localStorage.setItem(nameInput.value,emailInput.value);
+            let user = {
+                Uname : nameInput.value,
+                email : emailInput.value
+            };
+            localStorage.setItem('user',JSON.stringify(user));
+            //localStorage.setItem(nameInput.value,emailInput.value);
             nameInput.value='';
             emailInput.value='';
             pass.value='';
