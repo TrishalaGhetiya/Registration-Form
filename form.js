@@ -7,8 +7,9 @@ const myForm = document.querySelector('#my-form');
     const confirmpass = document.querySelector("#confirmpass");
     
     myForm.addEventListener("submit",onsubmit);
-    //localStorage.setItem('name','bob');
-    localStorage.removeItem('name');
+    userList.addEventListener('click',removeUser);
+    
+    
     function onsubmit(e)
     {
         e.preventDefault();
@@ -19,8 +20,13 @@ const myForm = document.querySelector('#my-form');
         }
         else
         {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className='btn btn-sm btn-danger delete float-right';
+            deleteBtn.appendChild(document.createTextNode('X'));
+
             const li = document.createElement('li');
             li.appendChild(document.createTextNode(`${nameInput.value}`));
+            li.appendChild(deleteBtn);
             userList.appendChild(li);
             let user = {
                 Uname : nameInput.value,
@@ -33,5 +39,20 @@ const myForm = document.querySelector('#my-form');
             pass.value='';
             confirmpass.value='';
             
+        }
+    }
+
+    function removeUser(e)
+    {
+        if(e.target.classList.contains('delete'))
+        {
+            if(confirm('Sure??'))
+            {
+                const li = e.target.parentElement;
+                const liData = e.target.firstChild.value;
+                localStorage.removeItem(liData);
+                userList.removeChild(li);
+                
+            }
         }
     }
