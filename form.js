@@ -24,9 +24,17 @@ const myForm = document.querySelector('#my-form');
             deleteBtn.className='btn btn-sm btn-danger delete float-right';
             deleteBtn.appendChild(document.createTextNode('X'));
 
+            const editButton = document.createElement('button');
+            editButton.className= 'btn btn-sm btn-success float-right edit';
+            editButton.appendChild(document.createTextNode('Edit'));
+
             const li = document.createElement('li');
             li.appendChild(document.createTextNode(`${nameInput.value}`));
+            li.appendChild(document.createTextNode(' - '));
+            li.appendChild(document.createTextNode(`${emailInput.value}`));
             li.appendChild(deleteBtn);
+            li.appendChild(editButton);
+
             userList.appendChild(li);
             let user = {
                 Uname : nameInput.value,
@@ -49,10 +57,20 @@ const myForm = document.querySelector('#my-form');
             if(confirm('Sure??'))
             {
                 const li = e.target.parentElement;
-                const liData = e.target.firstChild.value;
-                localStorage.removeItem(liData);
+                localStorage.removeItem(li.firstChild.textContent);
                 userList.removeChild(li);
-                
             }
+        }
+        if(e.target.classList.contains('edit'))
+        {
+            const li1 = e.target.parentElement;
+            const user = JSON.parse(localStorage.getItem(li1.firstChild.textContent));
+            nameInput.value=user.Uname;
+            emailInput.value=user.email;
+            localStorage.removeItem(li1.firstChild.textContent);
+            userList.removeChild(li1);
+            
+            
+            
         }
     }
