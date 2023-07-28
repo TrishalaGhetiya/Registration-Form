@@ -89,8 +89,6 @@ const myForm = document.querySelector('#my-form');
             {
                 const li = e.target.parentElement;
                 const delUserName = li.firstChild.textContent;
-                let delUserId =0;
-                console.log(delUserName);
                 axios.get('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment')
                 .then(res => {
                     for(let i=0;i<res.data.length;i++)
@@ -99,7 +97,7 @@ const myForm = document.querySelector('#my-form');
                         {
                             console.log(res.data[i]._id);
                             axios
-                                .delete('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${res.data[i]._id}')
+                                .delete(`https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${res.data[i]._id}`)
                                 .then(res => console.log(res))
                                 .catch(err => console.log(err))
                             break;
@@ -108,23 +106,37 @@ const myForm = document.querySelector('#my-form');
                     }
                 })
                 .catch(err => console.log(err))
-                //console.log(delUserId);
-                // axios
-                // .delete('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${delUserId}')
-                // .then(res => console.log(res))
-                // .catch(err => console.log(err))
-                //localStorage.removeItem(li.firstChild.textContent);
                 userList.removeChild(li);
             }
         }
         if(e.target.classList.contains('edit'))
         {
             const li1 = e.target.parentElement;
-            const user = JSON.parse(localStorage.getItem(li1.firstChild.textContent));
-            nameInput.value=user.Uname;
-            emailInput.value=user.email;
-            localStorage.removeItem(li1.firstChild.textContent);
-            userList.removeChild(li1);
+            const updateUserName = li1.firstChild.textContent;
+                axios.get('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment')
+                .then(res => {
+                    for(let i=0;i<res.data.length;i++)
+                    {
+                        if(res.data[i].user.Uname === updateUserName)
+                        {
+                            nameInput.value=res.data[i].user.Uname;
+                            emailInput.value=res.data[i].user.email;
+                            console.log(res.data[i]._id);
+                            axios
+                                .delete(`https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${res.data[i]._id}`)
+                                .then(res => console.log(res))
+                                .catch(err => console.log(err))
+                            break;
+                        }
+                            
+                    }
+                })
+                .catch(err => console.log(err))
+                userList.removeChild(li1);
+            //const user = JSON.parse(localStorage.getItem(li1.firstChild.textContent));
+            
+            //localStorage.removeItem(li1.firstChild.textContent);
+            //userList.removeChild(li1);
             
             
             
