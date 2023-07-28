@@ -14,6 +14,7 @@ const myForm = document.querySelector('#my-form');
                     for(let i=0;i<res.data.length;i++)
                     {
                         showNewUserOnScreen(res.data[i]);
+                        console.log(res.data[i])
                     }
                 })
                 .catch(err => console.log(err))
@@ -87,7 +88,32 @@ const myForm = document.querySelector('#my-form');
             if(confirm('Sure??'))
             {
                 const li = e.target.parentElement;
-                localStorage.removeItem(li.firstChild.textContent);
+                const delUserName = li.firstChild.textContent;
+                let delUserId =0;
+                console.log(delUserName);
+                axios.get('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment')
+                .then(res => {
+                    for(let i=0;i<res.data.length;i++)
+                    {
+                        if(res.data[i].user.Uname === delUserName)
+                        {
+                            console.log(res.data[i]._id);
+                            axios
+                                .delete('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${res.data[i]._id}')
+                                .then(res => console.log(res))
+                                .catch(err => console.log(err))
+                            break;
+                        }
+                            
+                    }
+                })
+                .catch(err => console.log(err))
+                //console.log(delUserId);
+                // axios
+                // .delete('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${delUserId}')
+                // .then(res => console.log(res))
+                // .catch(err => console.log(err))
+                //localStorage.removeItem(li.firstChild.textContent);
                 userList.removeChild(li);
             }
         }
