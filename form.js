@@ -7,7 +7,37 @@ const myForm = document.querySelector('#my-form');
     myForm.addEventListener("submit",onsubmit);
     userList.addEventListener('click',removeUser);
     
-    
+    window.addEventListener("DOMContentLoaded", () => {
+        axios.get('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment')
+                .then(res => {
+                    //console.log(res.data)
+                    for(let i=0;i<res.data.length;i++)
+                    {
+                        showNewUserOnScreen(res.data[i]);
+                    }
+                })
+                .catch(err => console.log(err))
+    })
+
+    function showNewUserOnScreen(data){
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className='btn btn-sm btn-danger delete float-right';
+        deleteBtn.appendChild(document.createTextNode('X'));
+
+        const editButton = document.createElement('button');
+        editButton.className= 'btn btn-sm btn-success float-right edit';
+        editButton.appendChild(document.createTextNode('Edit'));
+
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(`${data.user.Uname}`));
+        li.appendChild(document.createTextNode(' - '));
+        li.appendChild(document.createTextNode(`${data.user.email}`));
+        li.appendChild(deleteBtn);
+        li.appendChild(editButton);
+
+        userList.appendChild(li);
+    }
+
     function onsubmit(e)
     {
         e.preventDefault();
@@ -40,7 +70,7 @@ const myForm = document.querySelector('#my-form');
             };
             //localStorage.setItem(nameInput.value,JSON.stringify(user));
             axios.post('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment',{
-                data: user
+                 user
             })
             .then(console.log('User added'))
             .catch(err => console.log(err))
