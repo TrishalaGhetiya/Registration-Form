@@ -3,17 +3,19 @@ const myForm = document.querySelector('#my-form');
     const emailInput = document.querySelector('#email');
     const msg = document.querySelector('.msg');
     const userList = document.querySelector('#users');
-    
+    let userData = [];
+
     myForm.addEventListener("submit",onsubmit);
     userList.addEventListener('click',removeUser);
     
     window.addEventListener("DOMContentLoaded", () => {
-        axios.get('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment')
+        axios.get('https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment')
                 .then(res => {
                     //console.log(res.data)
                     for(let i=0;i<res.data.length;i++)
                     {
                         showNewUserOnScreen(res.data[i]);
+                        userData.push(res.data[i]);
                         console.log(res.data[i])
                     }
                 })
@@ -70,7 +72,7 @@ const myForm = document.querySelector('#my-form');
                 email : emailInput.value
             };
             //localStorage.setItem(nameInput.value,JSON.stringify(user));
-            axios.post('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment',{
+            axios.post('https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment',{
                  user
             })
             .then(console.log('User added'))
@@ -89,23 +91,18 @@ const myForm = document.querySelector('#my-form');
             {
                 const li = e.target.parentElement;
                 const delUserName = li.firstChild.textContent;
-                axios.get('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment')
-                .then(res => {
-                    for(let i=0;i<res.data.length;i++)
+                for(let i=0;i<userData.length;i++)
+                {
+                    if(userData[i].user.Uname === delUserName)
                     {
-                        if(res.data[i].user.Uname === delUserName)
-                        {
-                            console.log(res.data[i]._id);
-                            axios
-                                .delete(`https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${res.data[i]._id}`)
-                                .then(res => console.log(res))
-                                .catch(err => console.log(err))
-                            break;
-                        }
-                            
+                        axios
+                            .delete(`https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment/${userData[i]._id}`)
+                            .then(res => console.log(res))
+                            .catch(err => console.log(err))
+                        break;
                     }
-                })
-                .catch(err => console.log(err))
+                            
+                }
                 userList.removeChild(li);
             }
         }
@@ -113,32 +110,20 @@ const myForm = document.querySelector('#my-form');
         {
             const li1 = e.target.parentElement;
             const updateUserName = li1.firstChild.textContent;
-                axios.get('https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment')
-                .then(res => {
-                    for(let i=0;i<res.data.length;i++)
-                    {
-                        if(res.data[i].user.Uname === updateUserName)
-                        {
-                            nameInput.value=res.data[i].user.Uname;
-                            emailInput.value=res.data[i].user.email;
-                            console.log(res.data[i]._id);
-                            axios
-                                .delete(`https://crudcrud.com/api/a5f96a5777964f35835e6e50d5f0437a/Appointment/${res.data[i]._id}`)
-                                .then(res => console.log(res))
-                                .catch(err => console.log(err))
-                            break;
-                        }
-                            
+            for(let i=0;i<userData.length;i++)
+            {
+                if(userData[i].user.Uname === updateUserName)
+                {
+                    nameInput.value=userData[i].user.Uname;
+                    emailInput.value=userData[i].user.email;
+                    axios
+                        .delete(`https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment/${userData[i]._id}`)
+                        .then(res => console.log(res))
+                        .catch(err => console.log(err))
+                        break;
                     }
-                })
-                .catch(err => console.log(err))
-                userList.removeChild(li1);
-            //const user = JSON.parse(localStorage.getItem(li1.firstChild.textContent));
-            
-            //localStorage.removeItem(li1.firstChild.textContent);
-            //userList.removeChild(li1);
-            
-            
-            
+                            
+                }
+            userList.removeChild(li1); 
         }
     }
