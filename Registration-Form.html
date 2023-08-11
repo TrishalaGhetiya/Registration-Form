@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container bg-light mt-4">
-    <form class="signup-form" id="my-form">
+    <form class="signup-form" id="my-form" method="post">
         <div class="form-header bg-info">
             <div class="form-label mt-2">
                 <h1>Registration Form</h1>
@@ -19,9 +19,10 @@
         <div class="form-body">
             <div class="msg"></div>
             <div class="form-label">Name</div>
-            <input type="text" class="form-control" id="name" placeholder="Enter your name here">
+            <input type="text" class="form-control" id="userName" name="userName"  placeholder="Enter your name here">
             <div class="form-label">Email</div>
-            <input type="email" id="email" class="form-control" placeholder="name@example.com">
+            <input type="email" id="email" name="email" class="form-control" placeholder="name@example.com">
+            <input type="hidden" name="userId">
         </div>
             
         <div class="form-footer mt-4">

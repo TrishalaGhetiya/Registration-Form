@@ -1,5 +1,5 @@
 const myForm = document.querySelector('#my-form');
-    const nameInput = document.querySelector('#name');
+    const nameInput = document.querySelector('#userName');
     const emailInput = document.querySelector('#email');
     const msg = document.querySelector('.msg');
     const userList = document.querySelector('#users');
@@ -9,14 +9,14 @@ const myForm = document.querySelector('#my-form');
     userList.addEventListener('click',removeUser);
     
     window.addEventListener("DOMContentLoaded", () => {
-        axios.get('https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment')
+        axios.get('http://localhost:3000/main-page')
                 .then(res => {
-                    //console.log(res.data)
+                    //console.log(res.data[0].id);
                     for(let i=0;i<res.data.length;i++)
                     {
                         showNewUserOnScreen(res.data[i]);
                         userData.push(res.data[i]);
-                        console.log(res.data[i])
+                        //console.log(res.data[i])
                     }
                 })
                 .catch(err => console.log(err))
@@ -32,9 +32,9 @@ const myForm = document.querySelector('#my-form');
         editButton.appendChild(document.createTextNode('Edit'));
 
         const li = document.createElement('li');
-        li.appendChild(document.createTextNode(`${data.user.Uname}`));
+        li.appendChild(document.createTextNode(`${data.userName}`));
         li.appendChild(document.createTextNode(' - '));
-        li.appendChild(document.createTextNode(`${data.user.email}`));
+        li.appendChild(document.createTextNode(`${data.email}`));
         li.appendChild(deleteBtn);
         li.appendChild(editButton);
 
@@ -68,17 +68,15 @@ const myForm = document.querySelector('#my-form');
 
             userList.appendChild(li);
             let user = {
-                Uname : nameInput.value,
+                userName : nameInput.value,
                 email : emailInput.value
             };
             //localStorage.setItem(nameInput.value,JSON.stringify(user));
-            axios.post('https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment',{
-                 user
-            })
-            .then(console.log('User added'))
-            .catch(err => console.log(err))
-            nameInput.value='';
-            emailInput.value='';
+            axios.post('http://localhost:3000/', user)
+                .then(console.log('User added'))
+                .catch(err => console.log(err))
+                nameInput.value='';
+                emailInput.value='';
             
         }
     }
@@ -93,10 +91,10 @@ const myForm = document.querySelector('#my-form');
                 const delUserName = li.firstChild.textContent;
                 for(let i=0;i<userData.length;i++)
                 {
-                    if(userData[i].user.Uname === delUserName)
+                    if(userData[i].userName === delUserName)
                     {
                         axios
-                            .delete(`https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment/${userData[i]._id}`)
+                            .delete(`http://localhost:3000/delete-user/${userData[i].id}`)
                             .then(res => console.log(res))
                             .catch(err => console.log(err))
                         break;
@@ -112,12 +110,12 @@ const myForm = document.querySelector('#my-form');
             const updateUserName = li1.firstChild.textContent;
             for(let i=0;i<userData.length;i++)
             {
-                if(userData[i].user.Uname === updateUserName)
+                if(userData[i].userName === updateUserName)
                 {
-                    nameInput.value=userData[i].user.Uname;
-                    emailInput.value=userData[i].user.email;
+                    nameInput.value=userData[i].userName;
+                    emailInput.value=userData[i].email;
                     axios
-                        .delete(`https://crudcrud.com/api/d6aa24746acc42b9bb983719569092bf/Appointment/${userData[i]._id}`)
+                        .delete(`http://localhost:3000/delete-user/${userData[i].id}`)
                         .then(res => console.log(res))
                         .catch(err => console.log(err))
                         break;
